@@ -71,8 +71,8 @@ rectangle "adapter" #LightBlue {
     }
 }
 
-rectangle "configuration " #LightBlue {
-    package "configuration" #LightGrey {
+rectangle "backend " #LightBlue {
+    package "backend" #LightGrey {
         [*.bootstrap.*]
         [*.configuration.*]
         [ *Application.java]
