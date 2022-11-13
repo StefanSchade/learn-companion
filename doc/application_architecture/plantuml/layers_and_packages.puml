@@ -1,0 +1,128 @@
+'https://htmlcolorcodes.com/color-chart/
+
+@startuml
+top to bottom direction
+
+rectangle "BC01 " #E0E0E0  {
+
+rectangle "crosscutting" #ABB2B9 {
+    package "crosscutting " #AED6F1 {
+        [ *.ddd-api]
+        [*.exceptions.*]
+    }
+}
+
+rectangle "domain" #ABB2B9 {
+
+    package "model" #AED6F1 {
+        [*domain.model.*]
+    }
+    package "readonly" #AED6F1{
+        [*.domain.query.*]
+    }
+    package "services" #AED6F1 {
+        [*.domains.services.*]
+    }
+    }
+     
+rectangle "application" #ABB2B9 {
+    package "services " #AED6F1 {
+        [*.domainstory.*Impl.java] 
+        [*.domainevent.*Impl.java]
+      }
+    package "ports outbound persistence" #AED6F1 {
+        [ //Aggregate//Repository.java]
+    }
+    package "ports outbound queries" #AED6F1 {
+        [//UseCase//Query.java]
+    }
+    package "ports outbound dto" #AED6F1 {
+        [ *.out.*DTO.java] 
+        [*.out.*]
+    }
+    package "ports inbound" #AED6F1 {
+        [ *.in.*DTO.java]
+        [*.in.*]
+    }
+}
+
+rectangle "adapter" #ABB2B9 {
+    package "persistence" #AED6F1 {
+        [//Aggregate//RepositoryImpl.java]
+    }
+    package "messaging" #AED6F1 {
+        [ *Listener.java] 
+        [ *Sender.java]
+        [ *Listener.java]-[hidden]-[ *Sender.java]
+    }
+    package "webservices" #AED6F1  {
+        [  *Provider.java]
+        [ *Consumer.java]
+        [  *Provider.java]-[hidden]-[ *Consumer.java]
+    }
+    package "user interface" #AED6F1 {
+        [ *Controller.java]
+        [ *Notifier.java]
+        [ *Controller.java]-[hidden]-[ *Notifier.java]
+    }
+    package " environment" #AED6F1 {
+        [Service Provider]
+        [Service Calls]
+        [Service Provider]-[hidden]-[Service Calls]
+    }
+    package "query" #AED6F1 {
+        [//UseCase//QueryImpl.java]
+    }
+}
+
+}
+
+rectangle "backend " #ABB2B9 {
+    package "backend" #AED6F1 {
+        [*.bootstrap.*]
+        [*.configuration.*]
+        [ *Application.java]
+    }
+    }
+
+rectangle "frontend " #ABB2B9 {
+    package "frontend" #AED6F1 {
+        [webpack]
+    }
+    }
+
+' ***********************
+' layout
+' ***********************
+
+' layer domain - crosscutting
+        [*.domain.query.*]-[hidden]-[ *.ddd-api]
+
+' domain services above query results
+        [*.domains.services.*]-[hidden]->[*.domain.query.*]
+        [*.domains.services.*]-[hidden]->[*domain.model.*]
+
+' layer application - domain
+        [*.domainevent.*Impl.java]-[hidden]->[*.domains.services.*]
+
+' ports aggregates level with ports dto
+        [ //Aggregate//Repository.java]-[hidden]->[*.domainevent.*Impl.java]
+        [//UseCase//Query.java]-[hidden]->[*.domainevent.*Impl.java]
+        [ *.in.*DTO.java]-[hidden]->[*.domainevent.*Impl.java]
+
+' layer application
+
+        [//Aggregate//RepositoryImpl.java]-[hidden]-[ //Aggregate//Repository.java]
+        [//UseCase//QueryImpl.java]-[hidden]-[//UseCase//Query.java]
+        [*.in.*]-[hidden]-[*.domainevent.*Impl.java]
+
+' layer adapter application
+        [Service Calls]-[hidden]-[*.in.*]
+
+' layer adapter
+         [//Aggregate//RepositoryImpl.java]-[hidden]-[//UseCase//QueryImpl.java]
+
+' layer deployment - adapter
+        [ *Application.java]-[hidden]-[ *Controller.java]
+
+@enduml
