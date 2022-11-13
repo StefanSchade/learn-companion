@@ -37,7 +37,7 @@ rectangle "application" #ABB2B9 {
         [//UseCase//Query.java]
     }
     package "ports outbound dto" #AED6F1 {
-        [ *.out.*DTO.java] 
+        [ *.out.*DTO.java]
         [*.out.*]
     }
     package "ports inbound" #AED6F1 {
